@@ -39,5 +39,7 @@ class TelegramAuth implements AuthInterface
             $user = $_SESSION['user'];
             return $user->getId();
         }
+
+        return false;
     }
 }
