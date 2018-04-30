@@ -3,17 +3,44 @@
 namespace App\DTO;
 
 
+use App\ValueObjects\AuthType;
+use App\ValueObjects\AuthTypeInterface;
+
 class AuthDTO implements AuthDTOInterface
 {
+    private $type;
+    private $phone;
+    private $email;
+    private $password;
+
+    /**
+     * AuthDTO constructor.
+     * @param $type
+     * @param $phone
+     * @param $email
+     * @param $password
+     */
+    public function __construct($type, $phone, $email, $password)
+    {
+        $this->type = new AuthType($type);
+        $this->phone = $phone;
+        $this->email = $email;
+        $this->password = $password;
+    }
+
     public static function makeFromArray(array $data): self
     {
-        /** TODO: Создать DTO */
-        return new AuthDTO;
+        $type = $data['type'];
+        $phone = $data['phone'];
+        $email = $data['email'];
+        $password = $data['password'];
+
+        return new AuthDTO($type, $phone, $email, $password);
     }
 
     public function getType()
     {
-        // TODO: Implement getType() method.
+        return $this->type;
     }
 
     public function getPhone()

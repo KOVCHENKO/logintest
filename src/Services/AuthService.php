@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-
 use App\DTO\AuthDTOInterface;
 use App\Entities\AccountInterface;
 use App\Providers\AuthProviderInterface;
@@ -25,6 +24,7 @@ class AuthService implements AuthServiceInterface
     {
         $type = $dto->getType();
         $provider = $this->resolver->resolve($type, $this->providers);
+
         return $provider->auth($dto);
     }
 
@@ -32,9 +32,9 @@ class AuthService implements AuthServiceInterface
     public function addProvider($type, $provider)
     {
         if(!is_a($provider, AuthProviderInterface::class)) {
-            throw new Exception('not found');
+//            throw new Exception('not found');
         }
 
-        $this->providers[] = $provider;
+        $this->providers[$type] = $provider;
     }
 }

@@ -23,9 +23,10 @@ class AuthProviderResolver implements AuthProviderResolverInterface
             if (!$type->hasValue($providerType)) {
                 continue;
             }
+
             return $this->container->make($providerClass);
         }
 
-        throw new Exception('Provider not found');
+        throw new Exception('Provider not found!');
     }
 }
