@@ -45,16 +45,16 @@ class AuthDTO implements AuthDTOInterface
 
     public function getPhone()
     {
-        // TODO: Implement getPhone() method.
+        return $this->phone;
     }
 
     public function getMail()
     {
-        // TODO: Implement getMail() method.
+        return $this->email;
     }
 
     public function getPassword()
     {
-        // TODO: Implement getPassword() method.
+        return $this->password;
     }
 }

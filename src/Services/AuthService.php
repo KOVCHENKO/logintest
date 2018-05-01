@@ -32,7 +32,7 @@ class AuthService implements AuthServiceInterface
     public function addProvider($type, $provider)
     {
         if(!is_a($provider, AuthProviderInterface::class)) {
-//            throw new Exception('not found');
+//            throw new Exception('provider not found');
         }
 
         $this->providers[$type] = $provider;

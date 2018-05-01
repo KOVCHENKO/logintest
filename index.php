@@ -11,7 +11,7 @@ $loginData = [
     'email' => '123@mail.ru',
     'phone' => '89170863638',
     'password' => 'pass',
-    'type' => 'email'
+    'type' => 'phone'
 ];
 
 $authController = new AuthController(new AuthService(new AuthProviderResolver(new Container())));
@@ -34,7 +34,4 @@ $vkConfirmationData = [
     'phone' => '89170863638'
 ];
 
-//print_r($loginController->login($loginData));
-//print_r($loginController->confirmUser($telegramConfirmationData));
-//print_r($loginController->confirmUser($vkConfirmationData));
 ?>
