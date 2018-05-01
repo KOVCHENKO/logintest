@@ -24,14 +24,4 @@ try {
     echo $e;
 }
 
-$telegramConfirmationData = [
-    'type' => 'telegram',
-    'code' => '1234'
-];
-
-$vkConfirmationData = [
-    'type' => 'vk',
-    'phone' => '89170863638'
-];
-
 ?>
