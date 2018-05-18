@@ -1,70 +1,76 @@
 <?php
 
-namespace App\patterns\DI;
+namespace App\Infrastructure\DI;
 
 
 class DependencyInjector
 {
-    protected $services = [];
+    private $binds = [];
 
-    public function __construct()
+    public function bind($name, $class)
     {
+        return $this->binds[$name] = $this->instantiate($class);
     }
 
-    public function bind($service_name, callable $callable)
+    private function checkIfInstantiable($reflector, $class)
     {
-        // Check if the service exists
-        if (array_key_exists($this->services, $service_name)) {
-            throw new \Exception("The service: ".$service_name."already exists.");
+        if (!$reflector->isInstantiable()) {
+            throw new \Exception($class . " is not instantiable");
+        }
+    }
+
+    private function instantiate($class)
+    {
+        $reflector = new \ReflectionClass($class);
+
+        $this->checkIfInstantiable($reflector, $class);
+
+        $constructor = $reflector->getConstructor();
+
+        if (is_null($constructor)) {
+            return new $class;
         }
 
-        $this->services[$service_name] = $callable;
+        $parameters = $constructor->getParameters();
+        $dependencies = $this->getDependencies($parameters);
+
+        return $reflector->newInstanceArgs($dependencies);
     }
 
-    public function make($service_name)
+    private function getDependencies($parameters)
     {
-        // Check if the service exists
-        if (!array_key_exists($this->services, $service_name)) {
-            throw new \Exception("The service: ".$service_name."does not exist.");
+
+        $dependencies = array();
+
+        foreach ($parameters as $parameter) {
+            $dependency = $parameter->getClass();
+
+            if ($dependency->isInterface()) {
+                $dependencies[] = $dependency->getName();
+                continue;
+            }
+
+            if (is_null($dependency)) {
+                $dependencies[] = $this->resolveNonClass($parameter);
+            } else {
+                $dependencies[] = $this->instantiate($dependency->name);
+            }
         }
 
-        // Return the existing service
-        return $this->services[$service_name];
+        return $dependencies;
     }
+
+
+    public function make($name)
+    {
+        foreach ($this->binds as $bindName => $singleBind) {
+            if ($bindName == $name) {
+                return $singleBind;
+            }
+        }
+
+        throw new \Exception($name . " has not bind yet");
+    }
+
+
 }
-
-$config = [
-    'aws' => [
-        'key' => '123',
-        'private_key' => 'abc'
-    ],
-    'db' => [
-        'user' => '_ilkov_',
-        'password' => '_pass_'
-    ]
-];
-
-
-// This would be defined all in services.php
-$di = new DependencyInjector();
-$di->bind('aws', function() use ($config) {
-   $obj = new stdClass();
-   $obj->name = 'aws';
-   $obj->key = $config['aws']['key'];
-   $obj->private_key = $config['aws']['private_key'];
-
-   return $obj;
-});
-
-$di->bind('database', function() use ($config) {
-    $obj = new stdClass();
-    $obj->name = 'database';
-    $obj->user = $config['db']['user'];
-    $obj->password = $config['db']['password'];
-    return $obj;
-});
-
-// This should be called where it is needed
-$db = $di->make('database');
-$aws = $di->make('aws');
-

@@ -1,6 +1,6 @@
 <?php
 
-use App\Infrastructure\DI\Resolver;
+use App\Infrastructure\DI\DependencyInjector;
 use App\Infrastructure\Test\Foo;
 
 use App\Controllers\AuthController;
@@ -10,15 +10,15 @@ use App\Services\Container;
 
 require 'vendor/autoload.php';
 
-$resolver = new Resolver();
+$ioc = new DependencyInjector();
 
 echo "login test";
 echo "<br>";
 
-$resolver = new Resolver();
+$ioc = new DependencyInjector();
 
-$resolver->bind('foo_injectable', Foo::class);
-$injectable = $resolver->make('foo_injectable');
+$ioc->bind('foo_injectable', Foo::class);
+$injectable = $ioc->make('foo_injectable');
 
 $init = new \App\Infrastructure\Test\Init($injectable);
 $init->init();
@@ -31,8 +31,8 @@ $loginData = [
     'type' => 'phone'
 ];
 
-$resolver->bind('auth_service', AuthService::class);
-$authInjectable = $resolver->make('auth_service');
+$ioc->bind('auth_service', AuthService::class);
+$authInjectable = $ioc->make('auth_service');
 
 
 //$authController = new AuthController(new AuthService(new AuthProviderResolver(new Container())));
