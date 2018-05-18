@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTO\AuthDTOInterface;
 use App\Entities\AccountInterface;
+use App\Providers\AuthProvider;
 use App\Providers\AuthProviderInterface;
 use App\Providers\AuthProviderResolverInterface;
 use Exception;
@@ -31,10 +32,6 @@ class AuthService implements AuthServiceInterface
     /** @throws */
     public function addProvider($type, $provider)
     {
-        if(!is_a($provider, AuthProviderInterface::class)) {
-//            throw new Exception('provider not found');
-        }
-
         $this->providers[$type] = $provider;
     }
 }

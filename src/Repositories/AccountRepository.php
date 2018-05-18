@@ -19,9 +19,7 @@ class AccountRepository implements AccountRepositoryInterface
             if($singleUser['email'] == $email && $singleUser['password'])
             {
                 return new Account($singleUser['id'], $singleUser['status']);
-                break;
             }
-
         }
 
         throw new Exception('user not found in db');
@@ -36,7 +34,6 @@ class AccountRepository implements AccountRepositoryInterface
             if($singleUser['phone'] == $phone)
             {
                 return new Account($singleUser['id'], $singleUser['status']);
-                break;
             }
 
         }

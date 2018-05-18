@@ -20,9 +20,9 @@ class AuthDTO implements AuthDTOInterface
      * @param $email
      * @param $password
      */
-    public function __construct($type, $phone, $email, $password)
+    public function __construct(AuthType $type, $phone, $email, $password)
     {
-        $this->type = new AuthType($type);
+        $this->type = $type;
         $this->phone = $phone;
         $this->email = $email;
         $this->password = $password;
@@ -35,7 +35,7 @@ class AuthDTO implements AuthDTOInterface
         $email = $data['email'];
         $password = $data['password'];
 
-        return new AuthDTO($type, $phone, $email, $password);
+        return new AuthDTO(new AuthType($type), $phone, $email, $password);
     }
 
     public function getType()
